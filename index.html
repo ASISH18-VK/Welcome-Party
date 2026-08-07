@@ -2,401 +2,280 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>CSE Welcome Party | You're Invited</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>CSE Welcome Party 2026</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap');
 
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    min-height:100vh;
+    background:#07140e;
+    font-family:'Poppins',sans-serif;
+    color:#f5e8c7;
+    overflow-x:hidden;
+    position:relative;
   }
 
-  body {
-    min-height: 100vh;
-    background: #0a1f14;
-    overflow-x: hidden;
-    font-family: 'Poppins', sans-serif;
-    color: #f5e8c7;
-    position: relative;
+  /* Background */
+  .bg{
+    position:fixed;inset:0;z-index:-4;
+    background:
+      radial-gradient(ellipse at 30% 20%,#1a3c2e 0%,transparent 55%),
+      radial-gradient(ellipse at 70% 80%,#0d2818 0%,transparent 50%),
+      linear-gradient(160deg,#050f0a,#0a1f14 45%,#0d2818);
   }
 
-  /* Background gradient + texture */
-  .bg {
-    position: fixed;
-    inset: 0;
-    background: 
-      radial-gradient(ellipse at 20% 20%, #1a3c2e 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 80%, #0d2a1c 0%, transparent 50%),
-      linear-gradient(160deg, #06150e 0%, #0a1f14 40%, #0d2818 100%);
-    z-index: -2;
+  /* Glitter Layer */
+  #glitterCanvas{
+    position:fixed;inset:0;z-index:-2;pointer-events:none;
   }
 
-  /* Gold floating particles */
-  .particles {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
+  /* Petals */
+  .petal{
+    position:fixed;
+    top:-10%;
+    z-index:-1;
+    pointer-events:none;
+    opacity:0.7;
+    animation:fall linear infinite;
   }
-  .particle {
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    background: #d4af37;
-    border-radius: 50%;
-    opacity: 0.6;
-    animation: float 12s infinite linear;
+  @keyframes fall{
+    0%{transform:translateY(0) rotate(0deg);opacity:0}
+    10%{opacity:0.7}
+    100%{transform:translateY(110vh) rotate(720deg);opacity:0}
   }
 
-  @keyframes float {
-    0% { transform: translateY(100vh) scale(0); opacity: 0; }
-    10% { opacity: 0.7; }
-    90% { opacity: 0.7; }
-    100% { transform: translateY(-20vh) scale(1); opacity: 0; }
+  /* Floating Lights */
+  .light{
+    position:fixed;
+    width:6px;height:6px;
+    background:#d4af37;
+    border-radius:50%;
+    filter:blur(1px);
+    opacity:0.4;
+    z-index:-1;
+    animation:floatLight 8s ease-in-out infinite;
+  }
+  @keyframes floatLight{
+    0%,100%{transform:translateY(0) scale(1);opacity:0.3}
+    50%{transform:translateY(-30px) scale(1.4);opacity:0.7}
   }
 
-  /* Main container */
-  .container {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px 16px 40px;
-    position: relative;
+  /* Side Glow */
+  .side-glow{
+    position:fixed;top:0;bottom:0;width:60px;z-index:0;pointer-events:none;
+    opacity:0.15;
+  }
+  .left-glow{left:0;background:linear-gradient(to right,#d4af37,transparent)}
+  .right-glow{right:0;background:linear-gradient(to left,#d4af37,transparent)}
+
+  /* Main Card */
+  .container{
+    min-height:100vh;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    padding:20px 14px 50px;
+    position:relative;z-index:2;
   }
 
-  /* Invitation Card */
-  .card {
-    background: linear-gradient(145deg, rgba(15,40,28,0.85), rgba(8,25,18,0.9));
-    border: 1.5px solid rgba(212,175,55,0.35);
-    border-radius: 20px;
-    padding: 32px 24px 28px;
-    max-width: 420px;
-    width: 100%;
-    text-align: center;
-    box-shadow: 
-      0 0 40px rgba(212,175,55,0.12),
-      0 20px 60px rgba(0,0,0,0.5),
-      inset 0 1px 0 rgba(255,255,255,0.05);
-    backdrop-filter: blur(12px);
-    position: relative;
-    overflow: hidden;
-    animation: cardIn 1.2s cubic-bezier(0.16,1,0.3,1) forwards;
+  .card{
+    background:linear-gradient(160deg,rgba(12,35,25,0.92),rgba(6,20,14,0.95));
+    border:1.5px solid rgba(212,175,55,0.45);
+    border-radius:22px;
+    padding:34px 22px 30px;
+    max-width:400px;width:100%;
+    text-align:center;
+    box-shadow:0 0 60px rgba(212,175,55,0.18),0 25px 50px rgba(0,0,0,0.5);
+    backdrop-filter:blur(16px);
+    position:relative;
+    animation:cardEnter 1.3s cubic-bezier(0.16,1,0.3,1) forwards;
+  }
+  @keyframes cardEnter{
+    from{opacity:0;transform:translateY(50px) scale(0.92)}
+    to{opacity:1;transform:translateY(0) scale(1)}
   }
 
-  @keyframes cardIn {
-    from { opacity: 0; transform: translateY(40px) scale(0.95); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+  .card::before{
+    content:'';
+    position:absolute;top:0;left:0;right:0;height:3px;
+    background:linear-gradient(90deg,transparent,#d4af37,transparent);
   }
 
-  .card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, #d4af37, transparent);
+  .invite{font-size:12px;letter-spacing:3px;color:#c9a227;text-transform:uppercase;margin-bottom:6px;opacity:0;animation:fadeUp 0.7s 0.3s forwards}
+  .special{font-size:13px;letter-spacing:4px;color:#e8d5a3;margin-bottom:4px;opacity:0;animation:fadeUp 0.7s 0.45s forwards}
+  .welcome{
+    font-family:'Playfair Display',serif;
+    font-size:46px;font-weight:700;
+    background:linear-gradient(135deg,#f5e8c7,#d4af37,#f5e8c7);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    line-height:1.1;margin:6px 0 2px;
+    opacity:0;animation:fadeUp 0.8s 0.6s forwards;
   }
-
-  .invite-text {
-    font-size: 13px;
-    letter-spacing: 3px;
-    color: #c9a227;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.3s forwards;
+  .party{
+    font-family:'Cinzel',serif;
+    font-size:20px;letter-spacing:5px;color:#e8d5a3;
+    margin-bottom:16px;opacity:0;animation:fadeUp 0.7s 0.75s forwards;
   }
+  .divider{width:50px;height:1px;background:linear-gradient(90deg,transparent,#d4af37,transparent);margin:0 auto 14px;opacity:0;animation:fadeUp 0.7s 0.9s forwards}
+  .message{font-size:13.5px;line-height:1.55;color:#d4c9a8;margin-bottom:20px;opacity:0;animation:fadeUp 0.7s 1.05s forwards}
 
-  .special {
-    font-size: 14px;
-    letter-spacing: 4px;
-    color: #e8d5a3;
-    margin-bottom: 6px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.45s forwards;
+  .details{display:flex;gap:8px;margin-bottom:18px;opacity:0;animation:fadeUp 0.7s 1.2s forwards}
+  .box{
+    flex:1;background:rgba(212,175,55,0.09);
+    border:1px solid rgba(212,175,55,0.28);
+    border-radius:12px;padding:11px 5px;
   }
+  .label{font-size:9.5px;letter-spacing:1.2px;color:#c9a227;margin-bottom:3px}
+  .value{font-size:12.5px;font-weight:600;color:#f5e8c7;line-height:1.3}
 
-  .welcome {
-    font-family: 'Playfair Display', serif;
-    font-size: 48px;
-    font-weight: 700;
-    background: linear-gradient(135deg, #f5e8c7, #d4af37, #f5e8c7);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    line-height: 1.1;
-    margin: 8px 0 4px;
-    opacity: 0;
-    animation: fadeUp 0.9s 0.6s forwards;
+  .cse{font-family:'Cinzel',serif;font-size:18px;letter-spacing:4px;color:#d4af37;margin:6px 0 4px;opacity:0;animation:fadeUp 0.7s 1.35s forwards}
+  .footer{font-size:12.5px;font-style:italic;color:#c9b88a;opacity:0;animation:fadeUp 0.7s 1.5s forwards}
+
+  /* Countdown */
+  .countdown-wrap{margin-top:26px;width:100%;max-width:400px;opacity:0;animation:fadeUp 0.9s 1.7s forwards}
+  .cd-title{text-align:center;font-size:11px;letter-spacing:2.5px;color:#c9a227;margin-bottom:12px;text-transform:uppercase}
+  .countdown{display:flex;justify-content:center;gap:9px}
+  .time-box{
+    background:linear-gradient(145deg,rgba(18,45,32,0.95),rgba(8,25,18,0.98));
+    border:1px solid rgba(212,175,55,0.4);
+    border-radius:14px;padding:12px 8px;min-width:68px;text-align:center;
+    box-shadow:0 8px 20px rgba(0,0,0,0.35);
   }
+  .time-val{font-family:'Cinzel',serif;font-size:26px;font-weight:700;color:#f5e8c7;line-height:1}
+  .time-lab{font-size:9px;letter-spacing:1px;color:#c9a227;margin-top:3px;text-transform:uppercase}
+  .live{display:none;text-align:center;font-size:17px;color:#d4af37;font-weight:600;padding:14px;background:rgba(212,175,55,0.12);border-radius:12px;border:1px solid rgba(212,175,55,0.35)}
 
-  .party {
-    font-family: 'Cinzel', serif;
-    font-size: 22px;
-    letter-spacing: 6px;
-    color: #e8d5a3;
-    margin-bottom: 18px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.75s forwards;
-  }
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 
-  .divider {
-    width: 60px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, #d4af37, transparent);
-    margin: 0 auto 16px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.9s forwards;
-  }
-
-  .message {
-    font-size: 14px;
-    line-height: 1.55;
-    color: #d4c9a8;
-    margin-bottom: 22px;
-    opacity: 0;
-    animation: fadeUp 0.8s 1.05s forwards;
-  }
-
-  /* Details row */
-  .details {
-    display: flex;
-    justify-content: space-between;
-    gap: 8px;
-    margin-bottom: 22px;
-    opacity: 0;
-    animation: fadeUp 0.8s 1.2s forwards;
-  }
-
-  .detail-box {
-    flex: 1;
-    background: rgba(212,175,55,0.08);
-    border: 1px solid rgba(212,175,55,0.2);
-    border-radius: 12px;
-    padding: 12px 6px;
-  }
-
-  .detail-label {
-    font-size: 10px;
-    letter-spacing: 1.5px;
-    color: #c9a227;
-    margin-bottom: 4px;
-  }
-
-  .detail-value {
-    font-size: 13px;
-    font-weight: 600;
-    color: #f5e8c7;
-    line-height: 1.3;
-  }
-
-  .cse {
-    font-family: 'Cinzel', serif;
-    font-size: 20px;
-    letter-spacing: 4px;
-    color: #d4af37;
-    margin: 8px 0 6px;
-    opacity: 0;
-    animation: fadeUp 0.8s 1.35s forwards;
-  }
-
-  .footer-text {
-    font-size: 13px;
-    font-style: italic;
-    color: #c9b88a;
-    opacity: 0;
-    animation: fadeUp 0.8s 1.5s forwards;
-  }
-
-  /* Countdown Section */
-  .countdown-section {
-    margin-top: 28px;
-    width: 100%;
-    max-width: 420px;
-    opacity: 0;
-    animation: fadeUp 1s 1.7s forwards;
-  }
-
-  .countdown-title {
-    text-align: center;
-    font-size: 12px;
-    letter-spacing: 3px;
-    color: #c9a227;
-    margin-bottom: 14px;
-    text-transform: uppercase;
-  }
-
-  .countdown {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-  }
-
-  .time-box {
-    background: linear-gradient(145deg, rgba(20,50,35,0.9), rgba(10,30,20,0.95));
-    border: 1px solid rgba(212,175,55,0.3);
-    border-radius: 14px;
-    padding: 14px 10px;
-    min-width: 70px;
-    text-align: center;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-  }
-
-  .time-value {
-    font-family: 'Cinzel', serif;
-    font-size: 28px;
-    font-weight: 700;
-    color: #f5e8c7;
-    line-height: 1;
-  }
-
-  .time-label {
-    font-size: 10px;
-    letter-spacing: 1px;
-    color: #c9a227;
-    margin-top: 4px;
-    text-transform: uppercase;
-  }
-
-  .event-live {
-    text-align: center;
-    font-size: 18px;
-    color: #d4af37;
-    font-weight: 600;
-    padding: 16px;
-    background: rgba(212,175,55,0.1);
-    border-radius: 12px;
-    border: 1px solid rgba(212,175,55,0.3);
-    display: none;
-  }
-
-  /* Decorative leaves (CSS only) */
-  .leaf {
-    position: absolute;
-    opacity: 0.15;
-    pointer-events: none;
-  }
-  .leaf1 { top: 8%; left: -20px; font-size: 80px; transform: rotate(-20deg); }
-  .leaf2 { bottom: 12%; right: -15px; font-size: 70px; transform: rotate(30deg); }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(18px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* Responsive */
-  @media (max-width: 400px) {
-    .welcome { font-size: 40px; }
-    .time-box { min-width: 62px; padding: 12px 6px; }
-    .time-value { font-size: 24px; }
+  @media(max-width:380px){
+    .welcome{font-size:40px}
+    .time-box{min-width:60px;padding:10px 5px}
+    .time-val{font-size:22px}
   }
 </style>
 </head>
 <body>
   <div class="bg"></div>
-  <div class="particles" id="particles"></div>
+  <canvas id="glitterCanvas"></canvas>
+  <div class="side-glow left-glow"></div>
+  <div class="side-glow right-glow"></div>
 
   <div class="container">
     <div class="card">
-      <div class="invite-text">You Are Invited To</div>
+      <div class="invite">You Are Invited To</div>
       <div class="special">A Special</div>
       <div class="welcome">Welcome</div>
       <div class="party">PARTY</div>
-      
       <div class="divider"></div>
-      
-      <div class="message">
-        Please join us to celebrate<br>
-        a day full of love, laughter<br>
-        and beautiful memories.
-      </div>
+      <div class="message">Please join us to celebrate<br>a day full of love, laughter<br>and beautiful memories.</div>
 
       <div class="details">
-        <div class="detail-box">
-          <div class="detail-label">DATE</div>
-          <div class="detail-value">14 AUG 2026<br>FRIDAY</div>
+        <div class="box">
+          <div class="label">DATE</div>
+          <div class="value">14 AUG 2026<br>FRIDAY</div>
         </div>
-        <div class="detail-box">
-          <div class="detail-label">TIME</div>
-          <div class="detail-value">10:00 AM</div>
+        <div class="box">
+          <div class="label">TIME</div>
+          <div class="value">10:00 AM</div>
         </div>
-        <div class="detail-box">
-          <div class="detail-label">VENUE</div>
-          <div class="detail-value">Kalam Institute<br>of Technology</div>
+        <div class="box">
+          <div class="label">VENUE</div>
+          <div class="value">Kalam Institute<br>of Technology</div>
         </div>
       </div>
 
       <div class="cse">C.S.E</div>
-      <div class="footer-text">We look forward to celebrating with you!</div>
+      <div class="footer">We look forward to celebrating with you!</div>
     </div>
 
-    <!-- Countdown -->
-    <div class="countdown-section">
-      <div class="countdown-title">Event Starts In</div>
+    <div class="countdown-wrap">
+      <div class="cd-title">Event Starts In</div>
       <div class="countdown" id="countdown">
-        <div class="time-box">
-          <div class="time-value" id="days">00</div>
-          <div class="time-label">Days</div>
-        </div>
-        <div class="time-box">
-          <div class="time-value" id="hours">00</div>
-          <div class="time-label">Hours</div>
-        </div>
-        <div class="time-box">
-          <div class="time-value" id="mins">00</div>
-          <div class="time-label">Mins</div>
-        </div>
-        <div class="time-box">
-          <div class="time-value" id="secs">00</div>
-          <div class="time-label">Secs</div>
-        </div>
+        <div class="time-box"><div class="time-val" id="days">00</div><div class="time-lab">Days</div></div>
+        <div class="time-box"><div class="time-val" id="hours">00</div><div class="time-lab">Hours</div></div>
+        <div class="time-box"><div class="time-val" id="mins">00</div><div class="time-lab">Mins</div></div>
+        <div class="time-box"><div class="time-val" id="secs">00</div><div class="time-lab">Secs</div></div>
       </div>
-      <div class="event-live" id="eventLive">🎉 The Party Has Started! 🎉</div>
+      <div class="live" id="live">🎉 The Party Has Started! 🎉</div>
     </div>
   </div>
 
 <script>
-  // Create floating gold particles
-  const particlesContainer = document.getElementById('particles');
-  for (let i = 0; i < 35; i++) {
-    const p = document.createElement('div');
-    p.classList.add('particle');
-    p.style.left = Math.random() * 100 + '%';
-    p.style.animationDuration = (8 + Math.random() * 10) + 's';
-    p.style.animationDelay = Math.random() * 8 + 's';
-    p.style.width = p.style.height = (2 + Math.random() * 3) + 'px';
-    particlesContainer.appendChild(p);
+  // ===== Glitter Canvas (Performance friendly) =====
+  const canvas = document.getElementById('glitterCanvas');
+  const ctx = canvas.getContext('2d');
+  let w, h;
+  function resize(){w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight}
+  resize();
+  window.addEventListener('resize', resize);
+
+  const glitters = [];
+  for(let i=0;i<55;i++){
+    glitters.push({
+      x: Math.random()*w,
+      y: Math.random()*h,
+      r: Math.random()*2.2+0.8,
+      speed: Math.random()*0.6+0.2,
+      opacity: Math.random()*0.6+0.2
+    });
   }
 
-  // Countdown Timer - 14 August 2025, 10:00 AM IST
-  const targetDate = new Date('2026-08-14T10:00:00+05:30').getTime();
+  function drawGlitters(){
+    ctx.clearRect(0,0,w,h);
+    glitters.forEach(g=>{
+      ctx.beginPath();
+      ctx.arc(g.x,g.y,g.r,0,Math.PI*2);
+      ctx.fillStyle = `rgba(212,175,55,${g.opacity})`;
+      ctx.fill();
+      g.y += g.speed;
+      if(g.y > h+10){g.y = -10; g.x = Math.random()*w}
+    });
+    requestAnimationFrame(drawGlitters);
+  }
+  drawGlitters();
 
-  function updateCountdown() {
-    const now = new Date().getTime();
-    const distance = targetDate - now;
+  // ===== Falling Petals =====
+  const petalSymbols = ['🌸','💮','🍃','✨','🌼'];
+  for(let i=0;i<14;i++){
+    const el = document.createElement('div');
+    el.className = 'petal';
+    el.textContent = petalSymbols[Math.floor(Math.random()*petalSymbols.length)];
+    el.style.left = Math.random()*100 + 'vw';
+    el.style.fontSize = (14 + Math.random()*14) + 'px';
+    el.style.animationDuration = (8 + Math.random()*7) + 's';
+    el.style.animationDelay = Math.random()*6 + 's';
+    document.body.appendChild(el);
+  }
 
-    if (distance < 0) {
+  // ===== Floating Lights =====
+  for(let i=0;i<10;i++){
+    const light = document.createElement('div');
+    light.className = 'light';
+    light.style.left = Math.random()*100 + 'vw';
+    light.style.top = Math.random()*100 + 'vh';
+    light.style.animationDelay = Math.random()*5 + 's';
+    light.style.animationDuration = (6 + Math.random()*5) + 's';
+    document.body.appendChild(light);
+  }
+
+  // ===== Countdown =====
+  const target = new Date('2026-08-14T10:00:00+05:30').getTime();
+  function update(){
+    const now = Date.now();
+    const dist = target - now;
+    if(dist < 0){
       document.getElementById('countdown').style.display = 'none';
-      document.getElementById('eventLive').style.display = 'block';
+      document.getElementById('live').style.display = 'block';
       return;
     }
-
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const secs = Math.floor((distance % (1000 * 60)) / 1000);
-
-    document.getElementById('days').textContent = String(days).padStart(2, '0');
-    document.getElementById('hours').textContent = String(hours).padStart(2, '0');
-    document.getElementById('mins').textContent = String(mins).padStart(2, '0');
-    document.getElementById('secs').textContent = String(secs).padStart(2, '0');
+    document.getElementById('days').textContent = String(Math.floor(dist/(1000*60*60*24))).padStart(2,'0');
+    document.getElementById('hours').textContent = String(Math.floor((dist%(1000*60*60*24))/(1000*60*60))).padStart(2,'0');
+    document.getElementById('mins').textContent = String(Math.floor((dist%(1000*60*60))/(1000*60))).padStart(2,'0');
+    document.getElementById('secs').textContent = String(Math.floor((dist%(1000*60))/1000)).padStart(2,'0');
   }
-
-  updateCountdown();
-  setInterval(updateCountdown, 1000);
+  update();
+  setInterval(update,1000);
 </script>
 </body>
 </html>
