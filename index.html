@@ -13,6 +13,53 @@
             padding: 0;
             overflow-x: hidden;
         }
+
+        /* Welcome Overlay to force Audio & Animation Start */
+        #welcome-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(7, 47, 40, 0.95);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #welcome-overlay h1 {
+            color: #e5b865;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        #welcome-overlay p {
+            color: #b8c9c2;
+            font-size: 1rem;
+            margin-bottom: 25px;
+        }
+
+        .start-btn {
+            background-color: #e5b865;
+            color: #072f28;
+            padding: 15px 35px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(229,184,101,0.5);
+            transition: transform 0.2s;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.05);
+        }
+
         .main-container {
             max-width: 650px;
             margin: 0 auto;
@@ -21,6 +68,8 @@
             position: relative;
             z-index: 2;
         }
+
+        /* Falling Flowers & Particles Animation */
         .animation-container {
             position: fixed;
             top: 0;
@@ -30,15 +79,18 @@
             pointer-events: none;
             z-index: 1;
             background-image: 
-                radial-gradient(circle, #ffffff25 2px, transparent 2px),
-                radial-gradient(circle, #f4c43020 3px, transparent 3px);
-            background-size: 40px 40px, 60px 60px;
-            animation: fallAnimation 10s linear infinite;
+                radial-gradient(circle, #ffffff40 4px, transparent 4px),
+                radial-gradient(circle, #f4c43033 6px, transparent 6px),
+                radial-gradient(circle, #ffb6c133 5px, transparent 5px);
+            background-size: 40px 40px, 70px 70px, 90px 90px;
+            animation: fallAnimation 5s linear infinite;
         }
+
         @keyframes fallAnimation {
-            0% { background-position: 0 0, 0 0; }
-            100% { background-position: 40px 100vh, 60px 100vh; }
+            0% { background-position: 0 0, 0 0, 0 0; }
+            100% { background-position: 40px 100vh, 70px 100vh, 90px 100vh; }
         }
+
         .cap-icon { width: 45px; margin-bottom: 5px; }
         .invited-text { font-size: 0.85rem; letter-spacing: 4px; color: #e5b865; margin: 5px 0; }
         h1 { font-size: 2.8rem; font-weight: 800; margin: 5px 0; color: #fdfcf0; letter-spacing: 2px; }
@@ -77,6 +129,14 @@
 </head>
 <body>
 
+    <!-- Introductory Layer to force Audio and Animation Activation -->
+    <div id="welcome-overlay">
+        <h1>CSE Seminar Invitation</h1>
+        <p>Tap below to open invitation card with sound & effects</p>
+        <button class="start-btn" onclick="startExperience()">OPEN INVITATION 🎉</button>
+    </div>
+
+    <!-- Falling Flowers & Petals Animation Layer -->
     <div class="animation-container"></div>
 
     <div class="main-container">
@@ -162,28 +222,27 @@
 
     <script>
         const eventDate = new Date("Aug 20, 2026 10:00:00").getTime();
+        let audioCtx = null;
 
-        // High-bass Cinematic Countdown Tick Sound (Avengers style heavy mechanical pulse)
+        // Cinematic High-Bass Avengers Doom's Day Style Tick Sound
         function playCinematicTick() {
             try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                
-                // Deep Bass Sub-pulse
+                if (!audioCtx) return;
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 
-                osc.type = 'sawtooth'; // Gives a sharp, heavy cinematic edge
-                osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.08);
+                osc.type = 'sawtooth'; // Hard heavy pulse
+                osc.frequency.setValueAtTime(160, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(25, audioCtx.currentTime + 0.09);
                 
-                gain.gain.setValueAtTime(0.7, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.9, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.09);
                 
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
                 
                 osc.start();
-                osc.stop(audioCtx.currentTime + 0.08);
+                osc.stop(audioCtx.currentTime + 0.09);
             } catch(e) {}
         }
 
@@ -208,18 +267,25 @@
             document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
             document.getElementById("secs").innerText = String(seconds).padStart(2, '0');
 
-            // Trigger the cinematic high-bass tick sound every second
             playCinematicTick();
         };
 
-        // Browser security requires a tap/click anywhere on screen to enable sound playback
-        window.addEventListener('click', () => {
-            const tempCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if(tempCtx.state === 'suspended') { tempCtx.resume(); }
-        }, { once: true });
+        let timerInterval;
 
-        updateTimer();
-        const timerInterval = setInterval(updateTimer, 1000);
+        function startExperience() {
+            // Hide intro overlay smoothly
+            document.getElementById('welcome-overlay').style.display = 'none';
+            
+            // Initialize Web Audio Context
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if(audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            // Run timer immediately and start interval
+            updateTimer();
+            timerInterval = setInterval(updateTimer, 1000);
+        }
     </script>
 </body>
 </html>
