@@ -185,72 +185,71 @@
   </div>
 
 <script>
-  // ===== Deep Cinematic Tick Sound =====
-  let audioCtx;
-  let audioUnlocked = false;
+  // ===== Heavy Deep Tick Sound =====
+  let audioCtx = null;
+  let unlocked = false;
 
   function unlockAudio() {
-    if (audioUnlocked) return;
+    if (unlocked) return;
     try {
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      // silent buffer to unlock
       const buffer = audioCtx.createBuffer(1, 1, 22050);
       const source = audioCtx.createBufferSource();
       source.buffer = buffer;
       source.connect(audioCtx.destination);
       source.start(0);
-      audioUnlocked = true;
+      unlocked = true;
     } catch(e) {}
   }
 
-  // Unlock on first touch/click
-  document.body.addEventListener('touchstart', unlockAudio, {once: true});
-  document.body.addEventListener('click', unlockAudio, {once: true});
+  document.body.addEventListener('touchstart', unlockAudio, {once:true});
+  document.body.addEventListener('click', unlockAudio, {once:true});
 
   function playTick() {
-    if (!audioUnlocked || !audioCtx) return;
+    if (!unlocked || !audioCtx) return;
     try {
       const t = audioCtx.currentTime;
 
-      // Deep bass tick
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
+      // Heavy low bass body
+      const osc1 = audioCtx.createOscillator();
+      const gain1 = audioCtx.createGain();
       const filter = audioCtx.createBiquadFilter();
 
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(180, t);
-      osc.frequency.exponentialRampToValueAtTime(70, t + 0.07);
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(140, t);
+      osc1.frequency.exponentialRampToValueAtTime(55, t + 0.09);
 
       filter.type = 'lowpass';
-      filter.frequency.value = 350;
+      filter.frequency.value = 280;
 
-      gain.gain.setValueAtTime(0.25, t);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
+      gain1.gain.setValueAtTime(0.32, t);
+      gain1.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
 
-      osc.connect(filter);
-      filter.connect(gain);
-      gain.connect(audioCtx.destination);
+      osc1.connect(filter);
+      filter.connect(gain1);
+      gain1.connect(audioCtx.destination);
 
-      osc.start(t);
-      osc.stop(t + 0.11);
+      osc1.start(t);
+      osc1.stop(t + 0.13);
 
-      // Sharp click layer
+      // Sharp mechanical click
       const osc2 = audioCtx.createOscillator();
       const gain2 = audioCtx.createGain();
-      osc2.type = 'square';
-      osc2.frequency.value = 550;
-      gain2.gain.setValueAtTime(0.05, t);
-      gain2.gain.exponentialRampToValueAtTime(0.001, t + 0.035);
+      osc2.type = 'triangle';
+      osc2.frequency.value = 420;
+      gain2.gain.setValueAtTime(0.07, t);
+      gain2.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
       osc2.connect(gain2);
       gain2.connect(audioCtx.destination);
       osc2.start(t);
-      osc2.stop(t + 0.04);
+      osc2.stop(t + 0.045);
+
     } catch(e) {}
   }
 
   // Particles
   const pContainer = document.getElementById('particles');
-  for(let i=0;i<40;i++){
+  for(let i=0;i<38;i++){
     const p = document.createElement('div');
     p.className = 'particle';
     p.style.left = Math.random()*100 + '%';
@@ -262,7 +261,7 @@
 
   // Petals
   const emojis = ['🌸','💮','🍃','✨','🌼'];
-  for(let i=0;i<12;i++){
+  for(let i=0;i<11;i++){
     const el = document.createElement('div');
     el.className = 'petal';
     el.textContent = emojis[Math.floor(Math.random()*emojis.length)];
