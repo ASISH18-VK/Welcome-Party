@@ -185,21 +185,66 @@
   </div>
 
 <script>
-  // ===== Soft Ticking Sound (Web Audio API) =====
+  // ===== Deep Cinematic Tick Sound =====
   let audioCtx;
-  function playTick() {
+  let audioUnlocked = false;
+
+  function unlockAudio() {
+    if (audioUnlocked) return;
     try {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      // silent buffer to unlock
+      const buffer = audioCtx.createBuffer(1, 1, 22050);
+      const source = audioCtx.createBufferSource();
+      source.buffer = buffer;
+      source.connect(audioCtx.destination);
+      source.start(0);
+      audioUnlocked = true;
+    } catch(e) {}
+  }
+
+  // Unlock on first touch/click
+  document.body.addEventListener('touchstart', unlockAudio, {once: true});
+  document.body.addEventListener('click', unlockAudio, {once: true});
+
+  function playTick() {
+    if (!audioUnlocked || !audioCtx) return;
+    try {
+      const t = audioCtx.currentTime;
+
+      // Deep bass tick
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.frequency.value = 800;
+      const filter = audioCtx.createBiquadFilter();
+
       osc.type = 'sine';
-      gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
-      osc.start(audioCtx.currentTime);
-      osc.stop(audioCtx.currentTime + 0.08);
+      osc.frequency.setValueAtTime(180, t);
+      osc.frequency.exponentialRampToValueAtTime(70, t + 0.07);
+
+      filter.type = 'lowpass';
+      filter.frequency.value = 350;
+
+      gain.gain.setValueAtTime(0.25, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start(t);
+      osc.stop(t + 0.11);
+
+      // Sharp click layer
+      const osc2 = audioCtx.createOscillator();
+      const gain2 = audioCtx.createGain();
+      osc2.type = 'square';
+      osc2.frequency.value = 550;
+      gain2.gain.setValueAtTime(0.05, t);
+      gain2.gain.exponentialRampToValueAtTime(0.001, t + 0.035);
+      osc2.connect(gain2);
+      gain2.connect(audioCtx.destination);
+      osc2.start(t);
+      osc2.stop(t + 0.04);
     } catch(e) {}
   }
 
@@ -228,7 +273,7 @@
     document.body.appendChild(el);
   }
 
-  // Countdown + Tick Sound
+  // Countdown
   const target = new Date('2026-08-20T10:00:00+05:30').getTime();
   let lastSec = -1;
 
@@ -252,7 +297,6 @@
     document.getElementById('mins').textContent = String(mins).padStart(2,'0');
     document.getElementById('secs').textContent = String(secs).padStart(2,'0');
 
-    // Play tick only when second changes
     if(secs !== lastSec){
       playTick();
       lastSec = secs;
@@ -260,7 +304,7 @@
   }
 
   update();
-  setInterval(update, 200); // check frequently for smooth tick
+  setInterval(update, 200);
 </script>
 </body>
 </html>
